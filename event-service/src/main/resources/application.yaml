@@ -3,7 +3,12 @@ spring:
     name: event-service
   datasource:
     url: jdbc:mysql://localhost:3306/eventlab_events
-    username: we
-    password: we
+    username: ${MYSQL_USER:eventlab}
+    password: ${MYSQL_PASSWORD:we}
   jpa:
+    hibernate:
+      ddl-auto: update
     show-sql: true
+
+server:
+  port: 8081
