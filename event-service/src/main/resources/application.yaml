@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: event-service
+  datasource:
+    url: jdbc:mysql://localhost:3306/eventlab_events
+    username: we
+    password: we
+  jpa:
+    show-sql: true
