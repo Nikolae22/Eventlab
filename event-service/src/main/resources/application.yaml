@@ -2,7 +2,7 @@ spring:
   application:
     name: event-service
   datasource:
-    url: jdbc:mysql://localhost:3306/eventlab_events
+    url: jdbc:mysql://${DB_HOST:localhost}:${DB_PORT:3306}/${DB_NAME:eventlab_events}?useSSL=false&serverTimezone=UTC
     username: ${MYSQL_USER:eventlab}
     password: ${MYSQL_PASSWORD:we}
   jpa:
