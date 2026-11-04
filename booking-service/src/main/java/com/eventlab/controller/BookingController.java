@@ -1,8 +1,11 @@
 package com.eventlab.controller;
 
 import com.eventlab.dto.BookingDto;
+import com.eventlab.dto.BookingResponse;
 import com.eventlab.service.BookingService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -46,5 +49,22 @@ public class BookingController {
     public ResponseEntity<Void> deleteBooking(@PathVariable Long id){
         bookingService.deleteBooking(id);
         return ResponseEntity.noContent().build();
+    }
+
+
+    @Operation(summary = "Prenotazione a un evento",
+            description = "Registra una prenotazione verificando che l'evento esista, non sia passato, non sia completo e che l'email non sia già registrata.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "Prenotazione creata",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = BookingResponse.class))),
+            @ApiResponse(responseCode = "400", description = "Dati non validi", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Evento non trovato", content = @Content),
+            @ApiResponse(responseCode = "409", description = "Evento completo o email già prenotata", content = @Content),
+            @ApiResponse(responseCode = "503", description = "Servizio eventi non disponibile", content = @Content)
+    })
+    @PostMapping
+    public ResponseEntity<BookingResponse> bookingEvent(BookingDto bookingDto){
+        return ResponseEntity.ok(bookingService.createBooking(bookingDto));
     }
 }
