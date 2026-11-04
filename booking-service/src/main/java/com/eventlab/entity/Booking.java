@@ -23,10 +23,12 @@ public class Booking {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private Long eventId;
+    @Column(nullable = false)
     private String participantName;
     @Email(message = "Email non valida")
-    @Column(unique = true)
+    @Column(unique = true,nullable = false)
     private String participantEmail;
     @CreatedDate
     private LocalDateTime createdAt;
