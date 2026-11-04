@@ -1,11 +1,13 @@
 package com.eventlab.service;
 
 import com.eventlab.dto.BookingDto;
+import com.eventlab.dto.BookingResponse;
 
 import java.util.List;
 
 public interface BookingService  {
 
+    BookingResponse createBooking(BookingDto bookingDto);
 
     List<BookingDto> getBookings(Long eventId);
 

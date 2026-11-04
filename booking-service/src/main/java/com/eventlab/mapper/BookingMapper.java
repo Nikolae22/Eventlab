@@ -1,6 +1,7 @@
 package com.eventlab.mapper;
 
 import com.eventlab.dto.BookingDto;
+import com.eventlab.dto.BookingResponse;
 import com.eventlab.entity.Booking;
 
 public class BookingMapper {
@@ -20,5 +21,20 @@ public class BookingMapper {
                 booking.getParticipantName(),
                 booking.getParticipantEmail()
         );
+    }
+
+    /**
+     * metodo per fare il mapper tra booking e booking reponse
+     * per avere anche i detagli del evento nella rispota
+     * @param booking
+     * @return
+     */
+    public static BookingResponse toResponse(Booking booking) {
+        return new BookingResponse(
+                booking.getId(),
+                booking.getEventId(),
+                booking.getParticipantName(),
+                booking.getParticipantEmail(),
+                booking.getCreatedAt());
     }
 }
