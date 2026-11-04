@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: booking-service
+  datasource:
+    url: jdbc:mysql://${DB_HOST:localhost}:${DB_PORT:3306}/${DB_NAME:eventlab_bookings}
+    username: ${MYSQL_USER:eventlab}
+    password: ${MYSQL_PASSWORD:we}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.MySQLDialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+
+server:
+  port: 8082
