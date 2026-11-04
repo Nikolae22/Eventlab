@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
+@Entity(name = "event")
 public class Evento {
 
     @Id
@@ -28,7 +28,4 @@ public class Evento {
     private String luogo;
     @Column(nullable = false)
     private Integer capienzaMassima;
-
-
-
 }
