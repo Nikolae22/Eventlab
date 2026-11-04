@@ -12,6 +12,8 @@ spring:
       ddl-auto: update
     show-sql: true
 
+event-service:
+  url: http://localhost:8081
 
 server:
   port: 8082
