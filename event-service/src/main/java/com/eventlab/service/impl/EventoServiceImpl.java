@@ -1,6 +1,7 @@
 package com.eventlab.service.impl;
 
 import com.eventlab.dto.EventoDto;
+import com.eventlab.dto.EventoResponse;
 import com.eventlab.entity.Evento;
 import com.eventlab.exception.EventoNonTrovatoException;
 import com.eventlab.mapper.EventMapper;
@@ -30,10 +31,10 @@ public class EventoServiceImpl implements EventoService {
 
     @Transactional(readOnly = true)
     @Override
-    public EventoDto findById(Long id) {
+    public EventoResponse findById(Long id) {
         Evento evento=eventoRepository.findById(id)
                 .orElseThrow(()->new EventoNonTrovatoException(id));
-        return EventMapper.eventoDto(evento);
+        return EventMapper.toResponse(evento);
     }
 
     @Transactional
