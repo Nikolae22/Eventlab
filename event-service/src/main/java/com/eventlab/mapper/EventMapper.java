@@ -1,6 +1,7 @@
 package com.eventlab.mapper;
 
 import com.eventlab.dto.EventoDto;
+import com.eventlab.dto.EventoResponse;
 import com.eventlab.entity.Evento;
 
 public class EventMapper {
@@ -23,5 +24,15 @@ public class EventMapper {
                 evento.getLuogo(),
                 evento.getCapienzaMassima()
         );
+    }
+
+    public static EventoResponse toResponse(Evento evento) {
+        return new EventoResponse(
+                evento.getId(),
+                evento.getTitolo(),
+                evento.getDescrizione(),
+                evento.getDataEvento(),
+                evento.getLuogo(),
+                evento.getCapienzaMassima());
     }
 }

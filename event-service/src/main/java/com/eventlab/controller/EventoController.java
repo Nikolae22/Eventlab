@@ -1,6 +1,7 @@
 package com.eventlab.controller;
 
 import com.eventlab.dto.EventoDto;
+import com.eventlab.dto.EventoResponse;
 import com.eventlab.service.EventoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -39,13 +40,15 @@ public class EventoController {
     }
 
     @GetMapping("/{id}")
-    @Operation(summary = "Dettaglio evento", description = "Restituisce i dettagli, la capienza e le informazioni di un evento tramite il suo ID.")
+    @Operation(summary = "Dettaglio evento",
+            description = "Restituisce i dettagli, la capienza e le informazioni di un evento tramite il suo ID.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Evento trovato",
-                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = EventoDto.class))),
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = EventoResponse.class))),
             @ApiResponse(responseCode = "404", description = "Evento non trovato", content = @Content)
     })
-    public ResponseEntity<EventoDto> getById(@PathVariable Long id){
+    public ResponseEntity<EventoResponse> getById(@PathVariable Long id){
         return ResponseEntity.ok(eventoService.findById(id));
     }
 
