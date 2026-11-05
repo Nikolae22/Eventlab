@@ -31,4 +31,24 @@ public class GlobalHandlerException {
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
     }
+
+    @ExceptionHandler(EventoNonTrovatoException.class)
+    public ResponseEntity<Map<String, String>> eventoNonTrovato(EventoNonTrovatoException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(Map.of("errore", ex.getMessage()));
+    }
+
+    @ExceptionHandler({PrenotazioneDuplicataException.class,
+            EventoCompletoException.class})
+    public ResponseEntity<Map<String, String>> conflitto(RuntimeException ex) {
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(Map.of("errore", ex.getMessage()));
+    }
+
+    @ExceptionHandler(EventoPassatoException.class)
+    public ResponseEntity<Map<String, String>> eventoPassato(EventoPassatoException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(Map.of("errore", ex.getMessage()));
+    }
+
 }

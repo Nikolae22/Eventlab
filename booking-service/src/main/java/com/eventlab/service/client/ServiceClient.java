@@ -10,5 +10,5 @@ public interface ServiceClient {
 
 
     @GetExchange(value = "/{id}",accept = "application/json")
-    EventResponseDto getById(@PathVariable Long id);
+    EventResponseDto getById(@PathVariable("id") Long id);
 }
