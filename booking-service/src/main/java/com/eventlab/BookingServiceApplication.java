@@ -12,7 +12,6 @@ import org.springframework.web.service.registry.ImportHttpServices;
 @SpringBootApplication
 @EnableJpaAuditing
 @ImportHttpServices(group = "service",types = ServiceClient.class)
-@CrossOrigin(origins = "http://localhost:3000")
 public class BookingServiceApplication {
 
     public static void main(String[] args) {
