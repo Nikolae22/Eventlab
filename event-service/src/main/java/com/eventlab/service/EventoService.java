@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface EventoService {
 
-    List<EventoDto> getAll();
+    List<EventoResponse> getAll();
 
     EventoResponse findById(Long id);
 

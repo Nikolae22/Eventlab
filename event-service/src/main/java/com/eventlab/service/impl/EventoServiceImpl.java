@@ -22,10 +22,10 @@ public class EventoServiceImpl implements EventoService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<EventoDto> getAll() {
+    public List<EventoResponse> getAll() {
         return eventoRepository.findAll()
                 .stream()
-                .map(EventMapper::eventoDto)
+                .map(EventMapper::toResponse)
                 .toList();
     }
 
