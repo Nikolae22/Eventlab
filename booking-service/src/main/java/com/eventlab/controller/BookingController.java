@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -65,7 +66,7 @@ public class BookingController {
             @ApiResponse(responseCode = "503", description = "Servizio eventi non disponibile", content = @Content)
     })
     @PostMapping
-    public ResponseEntity<BookingResponse> bookingEvent(BookingDto bookingDto){
+    public ResponseEntity<BookingResponse> bookingEvent(@Valid @RequestBody BookingDto bookingDto){
         return ResponseEntity.ok(bookingService.createBooking(bookingDto));
     }
 }
