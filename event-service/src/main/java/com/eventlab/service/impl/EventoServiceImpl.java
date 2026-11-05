@@ -47,17 +47,17 @@ public class EventoServiceImpl implements EventoService {
 
     }
 
-    @Transactional
     @Override
-    public EventoDto updateById(Long id,EventoDto eventoDto) {
+    @Transactional
+    public EventoResponse updateById(Long id,EventoResponse eventoResponse) {
         Evento evento = eventoRepository.findById(id)
                 .orElseThrow(() -> new EventoNonTrovatoException(id));
-        evento.setTitolo(eventoDto.titolo());
-        evento.setDescrizione(eventoDto.descrizione());
-        evento.setCapienzaMassima(eventoDto.capienzaMassima());
-        evento.setLuogo(eventoDto.luogo());
-        evento.setDataEvento(eventoDto.dataEvento());
+        evento.setTitolo(eventoResponse.titolo());
+        evento.setDescrizione(eventoResponse.descrizione());
+        evento.setCapienzaMassima(eventoResponse.capienzaMassima());
+        evento.setLuogo(eventoResponse.luogo());
+        evento.setDataEvento(eventoResponse.dataEvento());
         Evento saved = eventoRepository.save(evento);
-        return EventMapper.eventoDto(saved);
+        return EventMapper.toResponse(saved);
     }
 }

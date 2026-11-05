@@ -13,6 +13,6 @@ public interface EventoService {
 
     EventoDto create(EventoDto eventoDto);
 
-    EventoDto updateById(Long id, EventoDto eventoDto);
+    EventoResponse updateById(Long id, EventoResponse eventoResponse);
 
 }

@@ -73,8 +73,8 @@ public class EventoController {
             @ApiResponse(responseCode = "404", description = "Evento non trovato", content = @Content),
             @ApiResponse(responseCode = "400", description = "Dati non validi", content = @Content)
     })
-    public ResponseEntity<EventoDto> updateEvento(@PathVariable Long id,
-                                                  @RequestBody @Valid EventoDto eventoDto){
-        return ResponseEntity.ok(eventoService.updateById(id,eventoDto));
+    public ResponseEntity<EventoResponse> updateEvento(@PathVariable Long id,
+                                                  @RequestBody @Valid EventoResponse eventoResponse){
+        return ResponseEntity.ok(eventoService.updateById(id,eventoResponse));
     }
 }
