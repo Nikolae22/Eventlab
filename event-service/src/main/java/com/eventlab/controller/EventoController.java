@@ -35,8 +35,8 @@ public class EventoController {
     @Operation(summary = "Elenco eventi", description = "Restituisce la lista di tutti gli eventi disponibili.")
     @ApiResponse(responseCode = "200", description = "Elenco recuperato con successo",
             content = @Content(mediaType = "application/json",
-                    array = @ArraySchema(schema = @Schema(implementation = EventoDto.class))))
-    public ResponseEntity<List<EventoDto>> findAll(){
+                    array = @ArraySchema(schema = @Schema(implementation = EventoResponse.class))))
+    public ResponseEntity<List<EventoResponse>> findAll() {
         return ResponseEntity.ok(eventoService.getAll());
     }
 
