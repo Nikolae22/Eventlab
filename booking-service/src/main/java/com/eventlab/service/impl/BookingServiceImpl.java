@@ -61,10 +61,10 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public List<BookingDto> getBookings(Long eventId) {
+    public List<BookingResponse> getBookings(Long eventId) {
         return bookingRepository.findByEventId(eventId)
                 .stream()
-                .map(BookingMapper::toDto)
+                .map(BookingMapper::toResponse)
                 .toList();
 
     }
