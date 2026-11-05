@@ -29,7 +29,7 @@ public class BookingController {
             description = "Restituisce tutte le prenotazioni registrate per l'evento indicato. Riservato all'operatore.")
     @ApiResponse(responseCode = "200", description = "Elenco prenotazioni")
     @GetMapping("/event/{eventId}")
-    public ResponseEntity<List<BookingDto>> getBookingsForEvent(@PathVariable Long eventId){
+    public ResponseEntity<List<BookingResponse>> getBookingsForEvent(@PathVariable Long eventId){
         return ResponseEntity.ok(bookingService.getBookings(eventId));
     }
 
