@@ -23,7 +23,6 @@ import java.util.List;
 @RequestMapping("/api/events")
 @RequiredArgsConstructor
 @Slf4j
-@CrossOrigin(origins = "http://localhost:3000")
 @Tag(name = "Eventi", description = "API per la gestione e consultazione degli eventi (Event Service)")
 public class EventoController {
 
