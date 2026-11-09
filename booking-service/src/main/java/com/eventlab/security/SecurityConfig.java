@@ -37,6 +37,7 @@ public class SecurityConfig {
                         .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/bookings").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/bookings/event/*/count").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/bookings/event/**").permitAll()
                         .requestMatchers("/api/bookings/**").hasRole("OPERATORE")
                         .anyRequest().authenticated())
                 .httpBasic(Customizer.withDefaults())
