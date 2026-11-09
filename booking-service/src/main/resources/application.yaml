@@ -17,3 +17,8 @@ event-service:
 
 server:
   port: 8082
+
+app:
+  operator:
+    username: ${OPERATORE_USERNAME:operatore}
+    password: ${OPERATORE_PASSWORD:test1234}
