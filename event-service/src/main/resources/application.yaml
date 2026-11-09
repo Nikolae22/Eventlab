@@ -14,3 +14,9 @@ spring:
 
 server:
   port: 8081
+
+ # credenziali per poter modificare e elimianre un evento  per sprign security
+app:
+  operatore:
+    username: operatore
+    password: test1234
