@@ -17,6 +17,6 @@ server:
 
  # credenziali per poter modificare e elimianre un evento  per sprign security
 app:
-  operatore:
-    username: operatore
-    password: test1234
+  operator:
+    username: ${OPERATOR_USERNAME:operatore}
+    password: ${OPERATOR_PASSWORD:test1234}
