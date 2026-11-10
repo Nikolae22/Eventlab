@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -66,6 +67,6 @@ public class BookingController {
     })
     @PostMapping
     public ResponseEntity<BookingResponse> bookingEvent(@Valid @RequestBody BookingDto bookingDto){
-        return ResponseEntity.ok(bookingService.createBooking(bookingDto));
+        return ResponseEntity.status(HttpStatus.CREATED).body(bookingService.createBooking(bookingDto));
     }
 }
