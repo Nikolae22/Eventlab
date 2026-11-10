@@ -13,6 +13,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -29,6 +30,7 @@ public class BookingController {
             description = "Restituisce tutte le prenotazioni registrate per l'evento indicato. Riservato all'operatore.")
     @ApiResponse(responseCode = "200", description = "Elenco prenotazioni")
     @GetMapping("/event/{eventId}")
+    @PreAuthorize("hasRole('OPERATORE')")
     public ResponseEntity<List<BookingResponse>> getBookingsForEvent(@PathVariable Long eventId){
         return ResponseEntity.ok(bookingService.getBookings(eventId));
     }
@@ -48,6 +50,7 @@ public class BookingController {
             @ApiResponse(responseCode = "404", description = "Prenotazione non trovata")
     })
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('OPERATORE')")
     public ResponseEntity<Void> deleteBooking(@PathVariable Long id){
         bookingService.deleteBooking(id);
         return ResponseEntity.noContent().build();
