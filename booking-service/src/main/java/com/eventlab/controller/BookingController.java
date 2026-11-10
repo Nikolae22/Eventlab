@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -71,5 +72,21 @@ public class BookingController {
     @PostMapping
     public ResponseEntity<BookingResponse> bookingEvent(@Valid @RequestBody BookingDto bookingDto){
         return ResponseEntity.status(HttpStatus.CREATED).body(bookingService.createBooking(bookingDto));
+    }
+
+
+    @Operation(summary = "Esporta prenotazioni in CSV",
+            description = "Scarica l'elenco delle prenotazioni di un evento in formato CSV. Riservato all'operatore.")
+    @ApiResponse(responseCode = "200", description = "File CSV generato con successo")
+    @GetMapping(value = "/event/{eventId}/export", produces = "text/csv")
+    @PreAuthorize("hasRole('OPERATORE')")
+    public ResponseEntity<String> exportBookingsCsv(@PathVariable Long eventId){
+        String csv= bookingService.generateCsvForEvent(eventId);
+
+        HttpHeaders headers=new HttpHeaders();
+        headers.set(HttpHeaders.CONTENT_DISPOSITION,"attachment; filename=bookings_event_"+eventId+".csv");
+        headers.set(HttpHeaders.CONTENT_TYPE, "text/csv; charset=UTF-8");
+
+        return ResponseEntity.ok().headers(headers).body(csv);
     }
 }
