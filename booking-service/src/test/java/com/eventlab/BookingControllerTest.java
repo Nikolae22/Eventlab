@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
@@ -144,6 +145,23 @@ public class BookingControllerTest {
         // When & Then
         mockMvc.perform(delete("/api/bookings/{id}", nonExistentId))
                 .andExpect(status().isNotFound());
+    }
+
+    @Test
+    @DisplayName("GET /api/bookings/event/{eventId}/export -> returns 200 OK with CSV file when user is operator")
+    @WithMockUser(username = "operatore", roles = {"OPERATORE"})
+    void should_export_csv_successfully_when_user_is_operator() throws Exception {
+        //given
+    Long eventId=1L;
+    String mockCsv = "ID,EventID,Participant Name\n10,1,Mario Rossi";
+
+        when(bookingService.generateCsvForEvent(eventId)).thenReturn(mockCsv);
+
+        // When & Then
+        mockMvc.perform(get("/api/bookings/event/{eventId}/export",eventId))
+                .andExpect(status().isOk())
+                .andExpect(header().string(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=bookings_event_1.csv"))
+                .andExpect(content().string(mockCsv));
     }
 
 }

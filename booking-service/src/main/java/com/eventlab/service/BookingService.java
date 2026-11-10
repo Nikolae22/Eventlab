@@ -15,4 +15,6 @@ public interface BookingService  {
 
     long getNumberOfBookingsForEvent(Long eventId);
 
+    String generateCsvForEvent(Long eventId);
+
 }
