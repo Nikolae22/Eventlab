@@ -272,7 +272,10 @@ function creaCard(evento, posti) {
 
 //apri il form booking per event id
 function apriForm(eventId) {
-    document.getElementById(`form-${eventId}`).classList.toggle("d-none");
+    const form = document.getElementById(`form-${eventId}`);
+    if (form) {
+        form.classList.toggle("hidden");
+    }
 }
 
 async function inviaForm(e, eventId) {
@@ -283,13 +286,15 @@ async function inviaForm(e, eventId) {
 
     const ok = await prenota(eventId, nome, email);
     if (ok) {
+        form.reset();
+        form.classList.add("hidden");
         await caricaEventi();   // aggiorna i posti residui
     }
 }
 
 // funzione che mi serve per vedere lista dei prenotati con il tasto elimina e il tasto csv per scaricare
 //richesta semrpe autorizazione
-async function apriForm(eventId){
+async function apriElenco(eventId){
     eventoCorrenteId = eventId;
     const bodyModal = document.getElementById("contenutoModalPartecipanti");
 
@@ -399,20 +404,6 @@ async function esportaCsv(eventId) {
     }
 }
 
-async function inviaForm(e, eventId) {
-    e.preventDefault();
-    const form = e.target;
-    const nome = form.nome.value.trim();
-    const email = form.email.value.trim();
-
-    const ok = await prenota(eventId, nome, email);
-    if (ok) {
-        form.reset();
-        form.classList.add("hidden");
-        await caricaEventi();
-    }
-}
-
 // Funzione per filtrare gli eventi in tempo reale tramite la barra di ricerca
 async function renderizzaEventi(eventiDaMostrare) {
     const contenitore = document.getElementById("eventi");
@@ -477,21 +468,6 @@ async function caricaEventi() {
             contenitore.innerHTML = `<div class="col-span-full p-4 bg-rose-50 border border-rose-200 text-rose-700 rounded-2xl text-xs text-center">Impossibile connettersi al server degli eventi su <strong>${EVENT_API}</strong>. Verifica che i microservizi Java siano attivi.</div>`;
         }
     }
-}
-
-function filtrarEventi() {
-    const q = document.getElementById('searchInput').value.toLowerCase().trim();
-    const filter = document.getElementById('filterAvailability').value;
-
-    const filtered = eventiCache.filter(ev => {
-        const matchesQuery = ev.titolo.toLowerCase().includes(q) || (ev.luogo && ev.luogo.toLowerCase().includes(q));
-
-        if (filter === 'available') return matchesQuery && ev.postiResidui > 0;
-        if (filter === 'full') return matchesQuery && ev.postiResidui <= 0;
-        return matchesQuery;
-    });
-
-    renderCards(filtered);
 }
 
 // Avvio automatico al caricamento della pagina
