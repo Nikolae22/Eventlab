@@ -26,7 +26,7 @@
                 <p class="text-xs text-slate-500">Gestione Eventi & Prenotazioni</p>
             </div>
         </div>
-        <button onclick="" class="inline-flex items-center px-4 py-2
+        <button onclick="toggleAreaOperatore()" class="inline-flex items-center px-4 py-2
         bg-slate-900 hover:bg-indigo-600 text-white text-xs font-semibold rounded-xl
          transition-all duration-200 shadow-sm">
             🔒 Area Operatore
@@ -49,10 +49,10 @@
                 <h2 class="text-base font-bold text-slate-800">Pubblica Nuovo Evento</h2>
                 <p class="text-xs text-slate-500">Inserisci i dettagli dell'incontro</p>
             </div>
-            <button onclick="" class="text-slate-400 hover:text-slate-600
+            <button onclick="toggleAreaOperatore()" class="text-slate-400 hover:text-slate-600
             text-sm font-semibold">✕ Chiudi</button>
         </div>
-        <form id="form-nuovo-evento" onsubmit="" class="grid grid-cols-1
+        <form id="form-nuovo-evento" onsubmit="creaCard(event)" class="grid grid-cols-1
          sm:grid-cols-2 gap-4">
             <div>
                 <label class="block text-xs font-semibold text-slate-600 mb-1">Titolo Evento</label>
@@ -104,30 +104,34 @@
         </form>
     </div>
 
-    <!-- BARRA DI RICERCA -->
-    <div class="flex flex-col sm:flex-row justify-between items-center gap-4 mb-8 bg-white
-     p-4 rounded-2xl border border-slate-200 shadow-sm">
+    <!-- BARRA DI RICERCA E FILTRI -->
+    <div class="flex flex-col sm:flex-row justify-between items-center gap-4 mb-8 bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
         <div>
             <h2 class="text-lg font-bold text-slate-800">Eventi in Programma</h2>
             <p class="text-xs text-slate-500">Esplora e prenota il tuo posto gratuitamente</p>
         </div>
-        <!-- Input di ricerca in tempo reale -->
-        <div class="w-full sm:w-72">
+
+        <!-- Contenitore flessibile dei filtri -->
+        <div class="flex flex-wrap items-center gap-2 w-full sm:w-auto">
             <!-- Input di ricerca per testo -->
-            <input type="text" id="inputRicerca" oninput="" placeholder="🔍
-            Cerca titolo o luogo..."
-                   class="px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-none
-                   focus:ring-2 focus:ring-indigo-500 transition-all">
+            <input type="text" id="inputRicerca" oninput="filtraEventi()" placeholder="🔍 Cerca titolo o luogo..."
+                   class="px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all flex-grow sm:flex-grow-0">
 
             <!-- Filtro Data Inizio -->
-            <input type="date" id="filtroDataDa" onchange="" class="px-3 py-2 bg-slate-50
-             border border-slate-200 rounded-xl text-xs focus:outline-none focus:ring-2
-             focus:ring-indigo-500 text-slate-600">
+            <input type="date" id="filtroDataDa" onchange="filtraEventi()"
+                   class="px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-600">
 
             <!-- Filtro Data Fine -->
-            <input type="date" id="filtroDataA" onchange="" class="px-3 py-2 bg-slate-50
-            border border-slate-200 rounded-xl text-xs focus:outline-none focus:ring-2
-            focus:ring-indigo-500 text-slate-600">
+            <input type="date" id="filtroDataA" onchange="filtraEventi()"
+                   class="px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-600">
+
+            <!-- Select Disponibilità (Uniformato nello stile) -->
+            <select id="filterAvailability" onchange="filtraEventi()"
+                    class="px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium text-slate-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition cursor-pointer">
+                <option value="all">Tutti gli eventi</option>
+                <option value="available">Solo disponibili</option>
+                <option value="full">Solo completi</option>
+            </select>
         </div>
     </div>
 
@@ -147,7 +151,7 @@ backdrop-blur-sm flex items-center justify-center p-4">
                 <h3 class="text-base font-bold text-slate-900">Elenco Partecipanti</h3>
                 <p class="text-xs text-slate-500">Gestisci le prenotazioni attive per questo evento</p>
             </div>
-            <button onclick="" class="text-slate-400 hover:text-slate-600
+            <button onclick="chiudiModal()" class="text-slate-400 hover:text-slate-600
             text-lg font-bold px-2">✕</button>
         </div>
         <div id="contenutoModalPartecipanti" class="max-h-80 overflow-y-auto divide-y
