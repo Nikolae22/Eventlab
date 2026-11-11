@@ -2,20 +2,72 @@ services:
   db:
     image: mysql:8.0
     container_name: eventlab_mysql
-    restart: always
+    restart: unless-stopped
     environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_USER: ${MYSQL_USER}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-rootpass}
+      MYSQL_USER: ${MYSQL_USER:-eventlab}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-eventlab}
     ports:
       - "3306:3306"
-    volumes:
-      - ./database:/docker-entrypoint-initdb.d
+#    volumes:
+#      - ./database:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD:-rootpass}"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+
+  event-service:
+    build: ./event-service
+    container_name: eventlab_event_service
+    restart: unless-stopped
+    environment:
+      DB_HOST: db
+      DB_NAME: eventlab_events
+      MYSQL_USER: ${MYSQL_USER:-eventlab}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-eventlab}
+      OPERATORE_USERNAME: ${OPERATORE_USERNAME:-operatore}
+      OPERATORE_PASSWORD: ${OPERATORE_PASSWORD:-test1234}
+    ports:
+      - "8081:8081"
+    depends_on:
+      db:
+        condition: service_healthy
+
+  booking-service:
+    build: ./booking-service
+    container_name: eventlab_booking_service
+    restart: unless-stopped
+    environment:
+      DB_HOST: db
+      DB_NAME: eventlab_bookings
+      MYSQL_USER: ${MYSQL_USER:-eventlab}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-eventlab}
+      EVENT_SERVICE_URL: http://event-service:8081
+      OPERATORE_USERNAME: ${OPERATORE_USERNAME:-operatore}
+      OPERATORE_PASSWORD: ${OPERATORE_PASSWORD:-test1234}
+    ports:
+      - "8082:8082"
+    depends_on:
+      db:
+        condition: service_healthy
+      event-service:
+        condition: service_started
+
+  frontend:
+    build: ./frontend
+    container_name: eventlab_frontend
+    restart: unless-stopped
+    ports:
+      - "3000:80"
+    depends_on:
+      - event-service
+      - booking-service
 
   adminer:
     image: adminer
-    container_name: adminer_gui
-    restart: always
+    container_name: eventlab_adminer
+    restart: unless-stopped
     ports:
       - "8080:8080"
     depends_on:
