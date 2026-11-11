@@ -1,0 +1,22 @@
+spring:
+  application:
+    name: event-service
+
+  datasource:
+    url: jdbc:h2:mem:test_db;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;MODE=MySql
+    username: es
+    password:
+    driver-class-name: org.h2.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+        format_sql: true
+app:
+  operator:
+    username: operatore
+    password: test1234

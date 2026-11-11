@@ -9,10 +9,12 @@ public interface BookingService  {
 
     BookingResponse createBooking(BookingDto bookingDto);
 
-    List<BookingDto> getBookings(Long eventId);
+    List<BookingResponse> getBookings(Long eventId);
 
     void deleteBooking(Long id);
 
     long getNumberOfBookingsForEvent(Long eventId);
+
+    String generateCsvForEvent(Long eventId);
 
 }

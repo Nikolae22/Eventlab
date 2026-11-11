@@ -7,12 +7,12 @@ import java.util.List;
 
 public interface EventoService {
 
-    List<EventoDto> getAll();
+    List<EventoResponse> getAll();
 
     EventoResponse findById(Long id);
 
     EventoDto create(EventoDto eventoDto);
 
-    EventoDto updateById(Long id, EventoDto eventoDto);
+    EventoResponse updateById(Long id, EventoResponse eventoResponse);
 
 }

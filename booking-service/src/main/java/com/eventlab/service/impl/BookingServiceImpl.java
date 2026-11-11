@@ -61,10 +61,10 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public List<BookingDto> getBookings(Long eventId) {
+    public List<BookingResponse> getBookings(Long eventId) {
         return bookingRepository.findByEventId(eventId)
                 .stream()
-                .map(BookingMapper::toDto)
+                .map(BookingMapper::toResponse)
                 .toList();
 
     }
@@ -80,5 +80,30 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public long getNumberOfBookingsForEvent(Long eventId) {
         return bookingRepository.countByEventId(eventId);
+    }
+
+    /**
+     * metodo per creare csv file per un evento con tutti i prenotati
+     * @param eventId
+     * @return
+     */
+    @Override
+    public String generateCsvForEvent(Long eventId) {
+        //recupero le prenotazioni per quell evento
+        List<BookingResponse> bookings=getBookings(eventId);
+
+        //costruiamo il csv
+        StringBuilder csv=new StringBuilder();
+        csv.append("ID,EventID,Participiante Name,Participiante Email\n");
+
+        for (BookingResponse b : bookings){
+            csv.append(b.id()).append(",")
+                    .append(b.eventId()).append(",")
+                    .append("\"").append(b.participantName()).append("\",")
+                    .append(b.participantEmail()).append(",")
+                    .append("\n");
+        }
+
+        return csv.toString();
     }
 }
