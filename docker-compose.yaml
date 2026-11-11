@@ -9,8 +9,8 @@ services:
       MYSQL_PASSWORD: ${MYSQL_PASSWORD:-eventlab}
     ports:
       - "3306:3306"
-#    volumes:
-#      - ./database:/docker-entrypoint-initdb.d
+    volumes:
+      - ./database:/docker-entrypoint-initdb.d
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD:-rootpass}"]
       interval: 5s
