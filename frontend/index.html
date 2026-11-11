@@ -94,6 +94,11 @@
                           placeholder="Descrivi brevemente l'evento..."
                           rows="2"></textarea>
             </div>
+
+            <div id="errore-nuovo-evento"
+            class="hidden sm:col-span-2 p-3 rounded-xl text-xs font-medium bg-rose-50 text-rose-700 border border-rose-200"
+            ></div>
+
             <div class="sm:col-span-2">
                 <button class="w-full py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white
                 text-sm font-semibold rounded-xl transition-colors shadow-md shadow-indigo-100"
@@ -135,9 +140,9 @@
 
 <!-- MODAL PARTECIPANTI -->
 <div id="modalPartecipanti" class="hidden fixed inset-0 z-50 overflow-y-auto bg-slate-900/40
-backdrop-blur-sm flex items-center justify-center p-4">
-    <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-slate-100
-    transform transition-all">
+backdrop-blur-sm p-4">
+    <div class="min-h-full flex items-center justify-center">
+    <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-slate-100">
         <div class="flex justify-between items-center mb-4 border-b border-slate-100 pb-3">
             <div>
                 <h3 class="text-base font-bold text-slate-900">Elenco Partecipanti</h3>
@@ -147,11 +152,12 @@ backdrop-blur-sm flex items-center justify-center p-4">
             text-lg font-bold px-2">✕</button>
         </div>
         <div id="contenutoModalPartecipanti" class="max-h-80 overflow-y-auto divide-y
-         divide-slate-100 pr-1">
+         divide-slate-100 pr-1"></div>
             <!-- Lista inserita dinamicamente -->
         </div>
     </div>
 </div>
+
 
 <!-- Footer -->
 <footer class="bg-white border-t border-slate-200 py-4 mt-12 text-center text-xs text-slate-400">
