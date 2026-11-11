@@ -22,6 +22,20 @@ function mostraMessaggio(testo, tipo) {
     }, 4500);
 }
 
+
+// Mostra un errore specifico dentro la card dell'evento in cui si sta tentando la prenotazione
+function mostraErroreCard(eventId, testo) {
+    const errorBox = document.getElementById(`errore-form-${eventId}`);
+    if (!errorBox) return;
+
+    errorBox.textContent = testo;
+    errorBox.classList.remove("hidden");
+
+    setTimeout(() => {
+        errorBox.classList.add("hidden");
+    }, 6000);
+}
+
 // per nascondere il forum di inserire eventi
 function toggleAreaOperatore(){
     const sezione=document.getElementById("sezioneOperatore");
@@ -31,7 +45,7 @@ function toggleAreaOperatore(){
 // per chiudere il modal -> lista dei partecipianti a un evento
 function chiudiModal(){
     const modal=document.getElementById("modalPartecipianti");
-    modal.classList.add("hiiden")
+    modal.classList.add("hidden")
 }
 
 async function postiResidui(evento) {
@@ -48,6 +62,8 @@ async function postiResidui(evento) {
 
 // prenota cioe booking service -> la persoan al evento
 async function prenota(eventId, nome, email) {
+    const errorBox=document.getElementById(`errore-form-${event}`);
+    if (errorBox) errorBox.classList.add("hidden")
     try {
         const risposta = await fetch(BOOKING_API, {
             method: "POST",
@@ -59,18 +75,24 @@ async function prenota(eventId, nome, email) {
             mostraMessaggio("Prenotazione confermata con successo!", "success");
             return true;
         }
-
-        const dati = await risposta.json();
+        //estrazione dettaglaita dell errore dal backend Spring boot
+        const dati = await risposta.json().catch(()=> ({}));
+        let messaggioErrore= "Errore durante la prenotazione";
         if (dati.errore) {
-            mostraMessaggio(dati.errore, "danger");
-        } else if (typeof dati === 'object') {
+            messaggioErrore = dati.errore;
+        }else if (dati.message) {
+            messaggioErrore=dati.message;
+        } else if (typeof dati === 'object' && Object.keys(dati).length >0) {
+            // Gestione errori di validazione dei campi (es. @Email, @NotBlank)
             mostraMessaggio(Object.values(dati).join(" "), "danger");
         } else {
             mostraMessaggio("Errore durante la prenotazione (es. e-mail già registrata o posti esauriti).", "danger");
         }
+        //mosta lerrore direttamente dentro la catd dell eventi
+        mostraErroreCard(eventId,messaggioErrore);
         return false;
     } catch (error) {
-        mostraMessaggio("Errore di connessione con il server delle prenotazioni.", "danger");
+        mostraErroreCard(eventId, "Errore di connessione con il server delle prenotazioni.");
         return false;
     }
 }
@@ -204,7 +226,6 @@ function creaCard(evento, posti) {
     <div class="bg-white rounded-2xl p-6 border border-slate-100 shadow-xl shadow-slate-100 hover:shadow-2xl transition-all duration-300 flex flex-col justify-between">
       <div>
         <div class="flex justify-between items-start mb-3">
-          <!-- BADGE STATO DINAMICO -->
           <span class="px-3 py-1 text-xs font-semibold rounded-full ${classeStato}">
             ${testoStato}
           </span>
@@ -218,7 +239,6 @@ function creaCard(evento, posti) {
       </div>
       
       <div>
-        <!-- BARRA DI PROGRESSO POSTI -->
         <div class="mb-4">
           <div class="flex justify-between text-xs font-semibold text-slate-600 mb-1">
             <span>Disponibilità</span>
@@ -231,39 +251,27 @@ function creaCard(evento, posti) {
           </div>
         </div>
 
-        <!-- SE È DISPONIBILE (NEL FUTURO E CON POSTI): MOSTRA IL FORM -->
-        <!-- SE È PASSATO O SOLD OUT: MOSTRA IL BLOCCO CHIUSO -->
         ${disponibile ? `
           <button class="w-full py-2.5 px-4 bg-slate-900 hover:bg-indigo-600 text-white text-xs font-semibold rounded-xl transition-colors duration-200 mb-2 shadow-sm" onclick="apriForm(${evento.id})">
             Prenota il tuo posto
           </button>
+          
+          <!-- Box errore specifico della card -->
+          <div id="errore-form-${evento.id}" class="hidden mb-2 p-2.5 bg-rose-50 border border-rose-200 text-rose-700 rounded-xl text-[11px] font-medium text-center"></div>
+
           <form id="form-${evento.id}" class="mt-2 hidden p-3 bg-slate-50 rounded-xl border border-slate-200 space-y-2" onsubmit="inviaForm(event, ${evento.id})">
-            <input class="w-full px-3 py-1.5 bg-white border border-slate-200 rounded-lg 
-                            text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500" 
-            name="nome" 
-            placeholder="Nome e cognome" 
-            required maxlength="100">
-            <input class="w-full px-3 py-1.5 bg-white border border-slate-200 rounded-lg text-xs 
-                            focus:outline-none focus:ring-2 focus:ring-indigo-500" 
-            name="email" type="email" 
-            placeholder="Indirizzo e-mail"
-             required>
-            <button class="w-full py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white 
-                        text-xs font-semibold rounded-lg transition-colors" 
-                        type="submit">Conferma Prenotazione</button>
+            <input class="w-full px-3 py-1.5 bg-white border border-slate-200 rounded-lg text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500" name="nome" placeholder="Nome e cognome" required maxlength="100">
+            <input class="w-full px-3 py-1.5 bg-white border border-slate-200 rounded-lg text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500" name="email" type="email" placeholder="Indirizzo e-mail" required>
+            <button class="w-full py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold rounded-lg transition-colors" type="submit">Conferma Prenotazione</button>
           </form>
         ` : `
-          <div class="w-full py-2.5 px-4 bg-slate-100 text-slate-400 text-xs font-bold 
-                rounded-xl text-center mb-2 border border-slate-200 cursor-not-allowed">
+          <div class="w-full py-2.5 px-4 bg-slate-100 text-slate-400 text-xs font-bold rounded-xl text-center mb-2 border border-slate-200 cursor-not-allowed">
             ${!eNelFuturo ? 'EVENTO CONCLUSO' : 'PRENOTAZIONI ESAURITE'}
           </div>
         `}
 
         <hr class="my-3 border-slate-100">
-        <button class="w-full py-2 px-3 bg-slate-50 hover:bg-slate-100
-            text-slate-600 text-xs font-semibold rounded-xl transition-colors
-                border border-slate-200" 
-                onclick="apriElenco(${evento.id})">
+        <button class="w-full py-2 px-3 bg-slate-50 hover:bg-slate-100 text-slate-600 text-xs font-semibold rounded-xl transition-colors border border-slate-200" onclick="apriElenco(${evento.id})">
           📋 Gestisci partecipanti
         </button>
       </div>
@@ -360,10 +368,14 @@ async function apriElenco(eventId){
             </div>
         `).join('') + `</div>`;
 
-        bodyModal.innerHTML = htmlContent;
+        if (bodyModal) {
+            bodyModal.innerHTML = htmlContent;
+        }
 
     } catch (e) {
-        bodyModal.innerHTML = `<div class="p-4 bg-rose-50 text-rose-700 rounded-xl text-xs text-center">Errore nel caricamento dei partecipanti.</div>`;
+        if (bodyModal) {
+            bodyModal.innerHTML = `<div class="p-4 bg-rose-50 text-rose-700 rounded-xl text-xs text-center">Errore nel caricamento dei partecipanti.</div>`;
+        }
     }
 }
 
