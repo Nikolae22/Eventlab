@@ -82,8 +82,8 @@ public class SecurityConfig {
 
     @Bean
     public UserDetailsService userDetailsService(PasswordEncoder encoder,
-                                                 @Value("${app.operator.username}") String username,
-                                                 @Value("${app.operator.password}") String password) {
+                                                 @Value("${app.operatore.username}") String username,
+                                                 @Value("${app.operatore.password}") String password) {
         UserDetails operatore = User.withUsername(username)
                 .password(encoder.encode(password))
                 .roles("OPERATORE")
